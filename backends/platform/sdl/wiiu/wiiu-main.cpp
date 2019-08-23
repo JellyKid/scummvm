@@ -26,41 +26,56 @@
 #include "backends/platform/sdl/wiiu/wiiu.h"
 #include "backends/plugins/sdl/sdl-provider.h"
 #include "base/main.h"
+#include <whb/proc.h>
+
 
 #ifdef __WIIU_DEBUG__
+#include <whb/log_console.h>
 #include <whb/log_cafe.h>
-#include <whb/log_udp.h>
 #include <whb/log.h>
+#include <whb/crash.h>
 #endif
 
 int main(int argc, char *argv[]) {
+    WHBProcInit();
+    WHBInitCrashHandler();
 
 #ifdef __WIIU_DEBUG__
+    WHBLogConsoleInit();
     WHBLogCafeInit();
-    //WHBLogUdpInit();
     WHBLogPrint("Logging initialized");
+    WHBLogConsoleDraw();
+
 #endif
 
 	// Create our OSystem instance
-    g_system = new OSystem_Wiiu();
-	assert(g_system);
+    //g_system = new OSystem_Wiiu();
+    //assert(g_system);
 
 	// Pre initialize the backend
-    ((OSystem_Wiiu *)g_system)->init();
+    //((OSystem_Wiiu *)g_system)->init();
 
 #ifdef DYNAMIC_MODULES
 	PluginManager::instance().addPluginProvider(new SDLPluginProvider());
 #endif
 
 	// Invoke the actual ScummVM main entry point:
-	int res = scummvm_main(argc, argv);
+    //int res = scummvm_main(argc, argv);
 
 	// Free OSystem
-	g_system->destroy();
+    //g_system->destroy();
+
+    while (WHBProcIsRunning()) {
+        #ifdef __WIIU_DEBUG__
+        WHBLogConsoleDraw();
+        #endif
+    }
 
 #ifdef __WIIU_DEBUG__
     WHBLogCafeDeinit();
+    WHBLogConsoleFree();
 #endif
-
-	return res;
+    WHBProcShutdown();
+    return 1;
+    //return res;
 }

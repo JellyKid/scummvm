@@ -264,3 +264,7 @@ scummvm_switch.zip
 #Ignore gmon.out created by gprof
 gmon.out
 /scummvm_libs_2015
+
+#Ignore Wii U files
+wiiu_release/
+scummvm.rpx
