@@ -58,6 +58,11 @@ MODULE_OBJS += \
 	switch/switch.o
 endif
 
+ifdef WIIU
+MODULE_OBJS += \
+	wiiu/wiiu-main.o \
+	wiiu/wiiu.o
+endif
 # We don't use rules.mk but rather manually update OBJS and MODULE_DIRS.
 MODULE_OBJS := $(addprefix $(MODULE)/, $(MODULE_OBJS))
 OBJS := $(MODULE_OBJS) $(OBJS)

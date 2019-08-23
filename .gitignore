@@ -223,6 +223,8 @@ ScummVM.config
 ScummVM.creator
 ScummVM.files
 ScummVM.includes
+ScummVM.cxxflags
+ScummVM.cflags
 
 #Ignore Komodo IDE/Edit project files
 *.komodoproject
